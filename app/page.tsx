@@ -1,113 +1,187 @@
-import Image from "next/image";
+"use client"
+
+import { useState, useTransition, useEffect } from "react"
 
 export default function Home() {
+  const [isPending, startTransition] = useTransition()
+  const [prompt, setPrompt] = useState("")
+  const [chats, setChats] = useState<{ type: "user" | "bot"; text: string }[]>([])
+  const [sendCount, setSendCount] = useState(0) // 送信回数を管理
+
+  useEffect(() => {
+    const savedChats = localStorage.getItem("chats")
+    if (savedChats) setChats(JSON.parse(savedChats))
+  }, [])
+
+  useEffect(() => {
+    localStorage.setItem("chats", JSON.stringify(chats))
+  }, [chats])
+
+  const onSend = async (e: any) => {
+    e.preventDefault()
+    
+    // ユーザーが入力した項目（プロンプト）と型として持っているプロンプトを切り分け
+    let userInput = e.target[0].value // ユーザーが入力した内容
+    let _prompt = userInput // 初期プロンプト
+
+    // 送信内容を条件に応じて修正
+    if (sendCount >= 0 && sendCount <= 4) {
+     _prompt += "ユーザーの返答内容では、深層心理にはまだ不十分です。追加で質問してください。"
+    } else if (sendCount >= 5 && sendCount <= 8) {
+      // これまでにユーザーが入力した内容と、インタビューを終了させる条件
+       _prompt += chats.filter(chat => chat.type === "user").map(chat => chat.text).join(" ") + `これまでのユーザーの返答をすべて考慮して以下のフォーマットに必要な情報がそろっていると判断した場合、インタビューを終了してください。不足している情報がある場合は、追加で質問してください。
+         インタビュー結果で埋めるべき項目
+      ・通勤・交通利便性：毎日の移動の快適さや時間短縮に対する価値観
+      ・生活環境：緑地や静かな環境、近隣の施設（スーパー、病院、学校など）に対する重要度
+      ・家族構成と生活の充実度：家族と過ごす時間や家庭内での役割に対する優先順位
+      ・経済的な要因（価格・コストパフォーマンス）：住宅価格や家賃に対する予算の範囲と満足度
+      ・安全性・治安：自分や家族の安心感や治安に対するこだわり
+      ・地域コミュニティへの参加意識：地域のイベントや近隣の人々とのつながりに対する期待感
+      ・将来の展望（子どもの成長や自分のライフプラン）：子どもが育つ環境や、長期的な生活設計における優先事項
+      ・快適さ・生活の質：日々の生活でのストレス軽減や快適な住まいに対する考え
+      ・趣味や余暇の過ごし方：周辺環境が趣味やリラックスできる時間にどう影響するか
+      ・地域の発展性・将来性：住んでいるエリアの将来の発展や、資産価値に対する期待や不安
+      ・なぜその駅を選んだか：ほかのどの駅でもない、その駅周辺を選んだ理由
+      `
+    } else if(sendCount == 9) {
+      _prompt = "「質問は以上になりますお時間いただきありがとうございました。」とだと送信してください 承知しましたなどの他の文言は一切不要です"
+    }
+
+    setChats((prev) => [...prev, { type: "user", text: userInput }]) // ユーザーの入力を追加
+    setPrompt("")
+    setSendCount(sendCount + 1) // 送信回数をカウント
+
+    startTransition(async () => {
+      const response = await fetch(`api/chat`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ prompt: _prompt }) // 修正したプロンプトを送信
+      })
+      if (response.body) {
+        const reader = response.body.getReader()
+        const decoder = new TextDecoder()
+
+        try {
+          let botResponse = ""
+          while (true) {
+            const { done, value } = await reader.read()
+
+            if (done) {
+              setChats((prev) => [...prev, { type: "bot", text: botResponse }]) // Botの返答を追加
+              break
+            }
+
+            if (value) {
+              const str = decoder.decode(value, { stream: true })
+              const chunkSwitcher = (chunk: any) => {
+                const chunk_type = chunk.type
+                switch (chunk_type) {
+                  case "message_start":
+                    console.log(chunk["message"]["id"])
+                    console.log(chunk["message"]["model"])
+                    break
+                  case "content_block_delta":
+                    const currentText = chunk["delta"]["text"]
+                    botResponse += currentText
+                    if (chunk["delta"]["stop_reason"] === "max_tokens") {
+                      return
+                    }
+                    break
+                  case "message_delta":
+                    if (chunk["delta"]["stop_reason"] === "end_turn") {
+                      return
+                    }
+                    break
+                  case "message_stop":
+                    const metrics = chunk["amazon-bedrock-invocationMetrics"]
+                    console.log(metrics)
+                    break
+                  default:
+                    null
+                }
+              }
+              if (str.includes("}{")) {
+                const formatedParts = str.split('}{').map((part, index, array) => {
+                  if (index === 0) {
+                    return `${part}}`
+                  } else if (index === array.length - 1) {
+                    return `{${part}`
+                  } else {
+                    return `{${part}}`
+                  }
+                })
+
+                const jsonList = formatedParts.map(part => JSON.parse(part))
+                for (const obj of jsonList) {
+                  chunkSwitcher(obj)
+                }
+              } else {
+                chunkSwitcher(JSON.parse(str))
+              }
+            }
+          }
+        } finally {
+          window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' })
+          reader.releaseLock()
+        }
+      }
+    })
+  }
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">app/page.tsx</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:size-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
+    <div className="h-screen flex flex-col gap-4">
+      <header className="p-4 grid place-items-center">
+        <h1 className="text-2xl font-semibold">AI Deep Insights</h1>
+      </header>
+      <main className="flex-1 flex flex-col p-4">
+        <div className="grid gap-4">
+            <div className="flex flex-col items-start gap-1">
+              <div className="flex flex-col max-w-[75%] rounded-lg p-4 bg-gray-100">
+                <div className="flex items-center gap-2 text-sm">
+                  <div className="font-medium bg-green-600 text-white px-2 py-1 rounded-full">AI Deep Insights</div>
+                </div>
+                <div className="mt-2 whitespace-pre-wrap">あなたは何故阪急電鉄の近くに住むことになったのでしょうか？また、住んでいる地域での思い出等あれば教えてください。</div>
+              </div>
+            </div>
+          {chats.map((chat, index) => (
+            <div
+              key={index}
+              className={`flex flex-col ${
+                chat.type === "user" ? "items-end" : "items-start"
+              } gap-1`}
+            >
+              <div className="flex flex-col max-w-[75%] rounded-lg p-4 bg-gray-100">
+                <div className="flex items-center gap-2 text-sm">
+                  <div
+                    className={`font-medium px-2 py-1 rounded-full ${
+                      chat.type === "user"
+                        ? "bg-slate-500 text-white"
+                        : "bg-green-600 text-white"
+                    }`}
+                  >
+                    {chat.type === "user" ? "あなた" : "AI Deep Insights"}
+                  </div>
+                </div>
+                <div className="mt-2 whitespace-pre-wrap">{chat.text}</div>
+              </div>
+            </div>
+          ))}
         </div>
+      </main>
+      <div className="border-t p-4">
+        <form className="flex gap-4" onSubmit={onSend}>
+          <input
+            placeholder="Type a message"
+            className="flex-1 p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring focus:ring-gray-400"
+            type="text"
+            value={prompt}
+            onChange={(e) => setPrompt(e.target.value)}
+          />
+          <button type="submit" className="px-6 py-3 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition-colors">Send</button>
+        </form>
       </div>
-
-      <div className="relative z-[-1] flex place-items-center before:absolute before:h-[300px] before:w-full before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-full after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 sm:before:w-[480px] sm:after:w-[240px] before:lg:h-[360px]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className="mb-32 grid text-center lg:mb-0 lg:w-full lg:max-w-5xl lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Docs{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Learn{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Templates{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Explore starter templates for Next.js.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Deploy{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-balance text-sm opacity-50">
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  );
+    </div>
+  )
 }
