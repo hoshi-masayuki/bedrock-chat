@@ -60,13 +60,14 @@ export default function Home() {
     setSendCount(sendCount + 1) // 送信回数をカウント
 
     startTransition(async () => {
-      const response = await fetch(`api/chat`, {
+      const response = await fetch(`/api/chat`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
         },
         body: JSON.stringify({ prompt: _prompt }) // 修正したプロンプトを送信
       })
+      
       if (response.body) {
         const reader = response.body.getReader()
         const decoder = new TextDecoder()
