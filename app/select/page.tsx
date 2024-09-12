@@ -51,7 +51,7 @@ type YearsResidence =
   | "11年～20年"
   | "20年以上"
 
-export default function Home() {
+export default function SelectValue() {
   const [selectedGender, setSelectedGender] = useState<Gender | null>(null);
   const [selectedAge, setSelectedAge] = useState<AgeGroup | null>(null);
   const [selectedFamily, setSelectedFamily] = useState<FamilyStructure | null>(null);

@@ -3,7 +3,7 @@
 import { useState, useTransition, useEffect, useRef } from "react"
 import Image from "next/image";
 
-export default function Home() {
+export default function Chatbot() {
   const [isPending, startTransition] = useTransition()
   const [prompt, setPrompt] = useState("")
   const [chats, setChats] = useState<{ type: "user" | "bot"; text: string }[]>([])

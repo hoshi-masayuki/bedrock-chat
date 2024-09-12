@@ -2,7 +2,7 @@
 
 import { useState, useTransition, useEffect } from "react";
 
-export default function Home() {
+export default function Result() {
   const [isPending, startTransition] = useTransition();
   const [botChat, setBotChat] = useState("")
 
