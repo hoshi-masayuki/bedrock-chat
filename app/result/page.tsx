@@ -39,12 +39,6 @@ export default function Home() {
       ・地域の発展性・将来性：住んでいるエリアの将来の発展や、資産価値に対する期待や不安
       ・なぜその駅を選んだか：ほかのどの駅でもない、その駅周辺を選んだ理由`;
 
-
-    // 送信回数が1回目の場合、localStorageに保存
-    if (sendCount === 0) {
-      localStorage.setItem("station", userInput) // "station" キーに保存
-    }
-
     // 送信内容を条件に応じて修正
     // 最初ユーザーが回答したことを掘り下げていく
     if (sendCount >= 0 && sendCount <= 4) {
@@ -159,54 +153,7 @@ export default function Home() {
       <header className="p-4 grid place-items-center">
         <h1 className="text-2xl font-semibold">AI Deep Insights</h1>
       </header>
-      <main className="flex-1 flex flex-col p-4">
-        <div className="grid gap-4">
-            <div className="flex flex-col items-start gap-1">
-              <div className="flex flex-col max-w-[75%] rounded-lg p-4 bg-gray-100">
-                <div className="flex items-center gap-2 text-sm">
-                  <div className="font-medium bg-green-600 text-white px-2 py-1 rounded-full">AI Deep Insights</div>
-                </div>
-                <div className="mt-2 whitespace-pre-wrap">あなたは何故阪急電鉄の近くに住むことになったのでしょうか？また、住んでいる地域での思い出等あれば教えてください。</div>
-              </div>
-            </div>
-          {chats.map((chat, index) => (
-            <div
-              key={index}
-              className={`flex flex-col ${
-                chat.type === "user" ? "items-end" : "items-start"
-              } gap-1`}
-            >
-              <div className="flex flex-col max-w-[75%] rounded-lg p-4 bg-gray-100">
-                <div className="flex items-center gap-2 text-sm">
-                  <div
-                    className={`font-medium px-2 py-1 rounded-full ${
-                      chat.type === "user"
-                        ? "bg-slate-500 text-white"
-                        : "bg-green-600 text-white"
-                    }`}
-                  >
-                    {chat.type === "user" ? "あなた" : "AI Deep Insights"}
-                  </div>
-                </div>
-                <div className="mt-2 whitespace-pre-wrap">{chat.text}</div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </main>
-      <div className="border-t p-4">
-        <form className="flex gap-4" onSubmit={onSend}>
-          <input
-            placeholder="Type a message"
-            className="flex-1 p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring focus:ring-gray-400"
-            type="text"
-            value={prompt}
-            onChange={(e) => setPrompt(e.target.value)}
-          />
-          <button type="submit" className="px-6 py-3 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition-colors">送信</button>
-          <button type="button" onClick={onDeleteChats} className="px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-500 transition-colors">やり直し</button>
-        </form>
-      </div>
+      
     </div>
   )
 }
