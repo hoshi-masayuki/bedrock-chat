@@ -1,15 +1,6 @@
 "use client"
 
 import { useState} from "react"
-
-
-interface Person {
-  Gender : string;
-  AgeGroup : string;
-  FamilyStructure : string;
-  Children  : string;
-}
-
 type Gender = "女性" | "男性" | "未回答";
 type AgeGroup =
   | "～19歳"
