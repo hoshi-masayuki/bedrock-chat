@@ -1,6 +1,7 @@
 "use client"
 
 import { useState} from "react"
+
 type Gender = "女性" | "男性" | "未回答";
 type AgeGroup =
   | "～19歳"
@@ -12,7 +13,7 @@ type AgeGroup =
   | "50歳～59歳"
   | "60歳～";
 type FamilyStructure = "独身" | "配偶者とふたり";
-type Children = "未就学" | "小学生" | "中学生";
+type Children = "なし" |"未就学" | "小学生" | "中学生" | "高校生" | "大学生" | "社会人";
 type IncomeGroup =
   | "200万円未満"
   | "200万円以上400万円未満"
@@ -61,7 +62,7 @@ export default function Home() {
     <div className="h-screen flex flex-col gap-4">
       <header className="p-4 grid place-items-center">
         <h1 className="text-2xl font-semibold">AI Deep Insights</h1>
-        <p className="text-center mb-4">はじめにあなたのことを教えてください</p>
+        <p className="text-center mb-4">はじめにあなたのことを教えてください※全ての項目を選択してください</p>
       </header>
       
       <div className="mb-4">
@@ -132,7 +133,7 @@ export default function Home() {
         <div className="mb-4">
           <label className="block font-semibold mb-2">子供の有無</label>
           <div className="flex gap-2">
-            {["未就学", "小学生", "中学生"].map((children) => (
+            {["なし","未就学", "小学生", "中学生","高校生","大学生","社会人"].map((children) => (
               <button
                 key={children}
                 className={`px-4 py-2 rounded-lg border ${
