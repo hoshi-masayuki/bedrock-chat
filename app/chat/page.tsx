@@ -13,7 +13,7 @@ export default function Chatbot() {
   const chatEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const savedChats = localStorage.getItem("chats")
+    const savedChats = localStorage.getItem("chats")    
     if (savedChats) setChats(JSON.parse(savedChats))
   }, [])
 
@@ -28,6 +28,10 @@ export default function Chatbot() {
     // ユーザーが入力した項目（プロンプト）と型として持っているプロンプトを切り分け
     let userInput = e.target[0].value // ユーザーが入力した内容
     let _prompt = userInput // 初期プロンプト
+
+    // 前画面で選択したユーザー情報
+    const obj = localStorage.getItem("interviewData") //localStorageから、取得する
+    const  userInfo = JSON.stringify(obj) //値を文字型に変換
 
     const targetValue = "質問は以上になりますお時間いただきありがとうございました";
 
