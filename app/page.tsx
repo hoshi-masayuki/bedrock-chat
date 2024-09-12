@@ -197,8 +197,8 @@ export default function Home() {
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
           />
-          <button type="submit" className="px-6 py-3 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition-colors">Send</button>
-          <button type="button" onClick={onDeleteChats} className="px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-500 transition-colors">Delete</button>
+          <button type="submit" className="px-6 py-3 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition-colors">送信</button>
+          <button type="button" onClick={onDeleteChats} className="px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-500 transition-colors">やり直し</button>
         </form>
       </div>
     </div>
