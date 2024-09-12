@@ -182,7 +182,7 @@ export default function Home() {
                 chat.type === "user" ? "ml-[10px]" : "mr-[10px]"}`}
               >
                 <Image
-                  src={`/${chat.type === "user" ? "user" : "chatBot"}.png`}
+                  src={`/${chat.type === "user" ? "user" : "chatbot"}.png`}
                   alt="アイコン"
                   width={30}
                   height={30}
