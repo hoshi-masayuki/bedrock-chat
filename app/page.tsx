@@ -31,11 +31,6 @@ export default function Home() {
 
     const targetValue = "質問は以上になりますお時間いただきありがとうございました";
 
-    // 送信回数が1回目の場合、localStorageに保存
-    if (sendCount === 0) {
-      localStorage.setItem("station", userInput) // "station" キーに保存
-    }
-
     // 送信内容を条件に応じて修正
     if (sendCount >= 0 && sendCount <= 4) {
       _prompt += "ユーザーの返答内容では、深層心理にはまだ不十分です。追加で質問してください。"
