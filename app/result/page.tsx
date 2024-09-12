@@ -95,9 +95,20 @@ export default function Home() {
   return (
     <div className="h-screen flex flex-col gap-4">
       <header className="p-4 grid place-items-center">
-        <h1 className="text-2xl font-semibold">AI Deep Insights</h1>
+        <h1 className="text-2xl font-semibold">レポート結果</h1>
       </header>
       <main className="flex-1 flex flex-col p-4">
+      <div className="flex flex-col items-start gap-1">
+              <div className="flex flex-col max-w-[75%] rounded-lg p-4 bg-gray-100">
+                <div className="flex items-center gap-2 text-sm">
+                </div>
+                <div className="mt-2 whitespace-pre-wrap">インタビューの回答いただきありがとうございました以下のフォルダーに出力結果をお名前と併せてご記入ください
+                <div className="text-green-600 px-2 py-1 rounded-full">
+                    <a href="https://www.google.com/" target="_blank">ここをクリックするとフォルダーに遷移します</a>
+                  </div>
+                </div>
+              </div>
+            </div>
         <div className="grid gap-4">
           {botChat &&
             <div className="flex flex-col items-start gap-1">
