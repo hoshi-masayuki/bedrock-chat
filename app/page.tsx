@@ -55,7 +55,7 @@ export default function Home() {
       _prompt += chats.filter(chat => chat.type === "user").map(chat => chat.text).join(" ") + interviewTitle + interviewFirstTerm
     } else if(sendCount >= 9 && sendCount <= 15) {
       _prompt += chats.filter(chat => chat.type === "user").map(chat => chat.text).join(" ") + interviewTitle + interviewNextTerm
-    } else if(sendCount >= 15 && sendCount <= 19) {
+    } else if(sendCount >= 16 && sendCount <= 19) {
       _prompt += chats.filter(chat => chat.type === "user").map(chat => chat.text).join(" ") +
       `
       これまでのユーザーの返答をすべて考慮して以下のフォーマットに必要な情報が8割揃っていると判断した場合、インタビューを終了してください。
