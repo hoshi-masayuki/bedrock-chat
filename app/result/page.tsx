@@ -3,7 +3,7 @@
 import { useState, useTransition, useEffect } from "react";
 import Image from "next/image";
 
-export default function Home() {
+export default function Result() {
   const [isPending, startTransition] = useTransition();
   const [botChat, setBotChat] = useState("")
 
