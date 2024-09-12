@@ -161,17 +161,17 @@ export default function Home() {
 
   return (
     <>
-      <header className="text-center py-4">
+      <header className="mt-8 text-center py-4">
         <h1 className="text-4xl font-bold">AI Deep Insights</h1>
         <p className="text-lg mt-2">※所要時間は20分~30分程度です。</p>
       </header>
       <main className="flex flex-col flex-nowrap justify-between min-h-[89.5vh]">
-        <div className="chat">
-          <div className="chatContents flex flex-nowrap">
-            <div className="chatIcon flex justify-center items-center w-[50px] h-[50px] rounded-full mr-[10px] bg-white">
+        <div className="mt-8">
+          <div className="flex flex-nowrap">
+            <div className="flex justify-center items-center w-[50px] h-[50px] rounded-full mr-[10px] bg-white">
               <Image src="/chatbot.png" alt="アイコン" width={30} height={30} />
             </div>
-            <div className="chatText w-[80%] mb-[30px] p-[10px] bg-white rounded-[10px]">
+            <div className="w-[80%] mb-[30px] p-[10px] bg-white rounded-[10px] shadow-2xl">
               <p>あなたは何故阪急電鉄の近くに住むことになったのでしょうか？また、住んでいる地域での思い出等あれば教えてください。</p>
             </div>
           </div>
@@ -192,7 +192,7 @@ export default function Home() {
                   height={30}
                 />
               </div>
-              <div className={`chatText w-[80%] mb-[30px] p-[10px] rounded-[10px] ${chat.type === "user" ? "bg-blue-100" : "bg-white"}`}>
+              <div className={`chatText w-[80%] mb-[30px] p-[10px] rounded-[10px] shadow-2xl ${chat.type === "user" ? "bg-blue-100" : "bg-white"}`}>
                 <p>{chat.text}</p>
               </div>
             </div>
