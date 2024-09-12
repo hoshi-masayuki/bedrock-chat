@@ -12,8 +12,26 @@ type AgeGroup =
   | "40歳～49歳"
   | "50歳～59歳"
   | "60歳～";
-type FamilyStructure = "独身" | "配偶者とふたり";
-type Children = "なし" |"未就学" | "小学生" | "中学生" | "高校生" | "大学生" | "社会人";
+type FamilyStructure = "未婚" | "既婚";
+type FamilySize =
+  | "1人（一人暮らし）"
+  | "2人"
+  | "3人"
+  | "4人"
+  | "5人以上"
+type ChildrenSize =
+  | "3人以上いる"
+  | "2人いる" 
+  | "1人いる" 
+  |"いない";
+type ChildrenOld =
+  | "なし" 
+  |"未就学" 
+  | "小学生" 
+  | "中学生" 
+  | "高校生" 
+  | "大学生"
+  | "社会人";
 type IncomeGroup =
   | "200万円未満"
   | "200万円以上400万円未満"
@@ -26,19 +44,25 @@ type IncomeGroup =
   | "2000万円以上"
   | "わからない"
   | "答えたくない";
+type YearsResidence =
+  | "1年未満"
+  | "1年～5年"
+  | "6年～10年"
+  | "11年～20年"
+  | "20年以上"
 
 export default function Home() {
   const [selectedGender, setSelectedGender] = useState<Gender | null>(null);
   const [selectedAge, setSelectedAge] = useState<AgeGroup | null>(null);
-  const [selectedFamily, setSelectedFamily] = useState<FamilyStructure | null>(
-    null
-  );
-  const [selectedChildren, setSelectedChildren] = useState<Children | null>(
-    null
-  );
+  const [selectedFamily, setSelectedFamily] = useState<FamilyStructure | null>(null);
+  const [selectedFamilySize, setSelectedFamilySize] = useState<FamilySize | null>(null);
+  const [selectedChildrenSize, setSelectedChildrenSize] = useState<ChildrenSize | null>(null);
+  const [selectedChildrenOld, setSelectedChildrenOld] = useState<ChildrenOld | null>(null);
   const [selectedIncome, setSelectedIncome] = useState<IncomeGroup | null>(null);
+  const [selectedYearsResidence, setSelectedYearsResidence] = useState<YearsResidence | null>(null);
   const [station, setStation] = useState<string>("");
-   const [showIncomeDropdown, setShowIncomeDropdown] = useState<boolean>(false); // ドロップダウンの表示・非表示を管理
+  const [showIncomeDropdown, setShowIncomeDropdown] = useState<boolean>(false); // ドロップダウンの表示・非表示を管理
+
 
 
    const handleStartInterview = () => {
@@ -46,9 +70,12 @@ export default function Home() {
       gender: selectedGender,
       age: selectedAge,
       familyStructure: selectedFamily,
-      children: selectedChildren,
+      childrenOld: selectedChildrenOld,
+      ChildrenSize: selectedChildrenSize,
       income: selectedIncome,
       station: station,
+      familySize: selectedFamilySize,
+      yearsResidence:selectedYearsResidence
     };
 
     // JSON 形式で localStorage に保存
@@ -58,6 +85,7 @@ export default function Home() {
     location.href = url
   };
 
+   
   return (
     <div className="h-screen flex flex-col gap-4">
       <header className="p-4 grid place-items-center">
@@ -65,6 +93,7 @@ export default function Home() {
         <p className="text-center mb-4">はじめにあなたのことを教えてください※全ての項目を選択してください</p>
       </header>
       
+      {/* 性別*/}
       <div className="mb-4">
         <label className="block font-semibold mb-2">性別</label>
         <div className="flex gap-2 flex-wrap">
@@ -84,6 +113,7 @@ export default function Home() {
         </div>
       </div>
 
+      {/* 年齢*/}
        <div className="mb-4">
         <label className="block font-semibold mb-2">年齢</label>
         <div className="flex gap-2 flex-wrap">
@@ -110,10 +140,11 @@ export default function Home() {
         </div>
         </div>
 
+        {/* 家族構成*/}
         <div className="mb-4">
           <label className="block font-semibold mb-2">家族構成</label>
           <div className="flex gap-2">
-            {["独身", "配偶者とふたり"].map((family) => (
+            {["未婚", "既婚"].map((family) => (
               <button
                 key={family}
                 className={`px-4 py-2 rounded-lg border ${
@@ -129,21 +160,104 @@ export default function Home() {
           </div>
         </div>
 
-        {/* 子供の有無 */}
+        {/* 家族の人数*/}
         <div className="mb-4">
-          <label className="block font-semibold mb-2">子供の有無</label>
-          <div className="flex gap-2">
-            {["なし","未就学", "小学生", "中学生","高校生","大学生","社会人"].map((children) => (
+          <label className="block font-semibold mb-2">同居している家族の人数</label>
+          <div className="flex gap-2 flex-wrap">
+            {[
+            "1人（一人暮らし）",
+            "2人",
+            "3人",
+            "4人",
+            "5人以上",
+          ].map((familySize) => (
               <button
-                key={children}
+                key={familySize}
                 className={`px-4 py-2 rounded-lg border ${
-                  selectedChildren === children
+                  selectedFamilySize === familySize
                     ? "bg-blue-500 text-white"
                     : "bg-gray-200"
                 }`}
-                onClick={() => setSelectedChildren(children as Children)}
+                onClick={() => setSelectedFamilySize(familySize as FamilySize)}
+              >
+                {familySize}
+              </button>
+            ))}
+          </div>
+        </div>
+
+          {/* 子供の人数 */}
+          <div className="mb-4">
+          <label className="block font-semibold mb-2">同居している家族には、あなたのお子様（息子さんや娘さん）がいらっしゃいますか。</label>
+          <div className="flex gap-2 flex-wrap">
+            {[
+              "3人以上いる",
+              "2人いる", 
+              "1人いる", 
+              "いない",
+            ].map((childrenSize) => (
+              <button
+                key={childrenSize}
+                className={`px-4 py-2 rounded-lg border ${
+                  selectedChildrenSize === childrenSize
+                    ? "bg-blue-500 text-white"
+                    : "bg-gray-200"
+                }`}
+                onClick={() => setSelectedChildrenSize(childrenSize as ChildrenSize)}
+              >
+                {childrenSize}
+              </button>
+            ))}
+          </div>
+        </div>
+        {/* 子供の年齢 */}
+        <div className="mb-4">
+          <label className="block font-semibold mb-2">お子様の末子（一番小さい子）についてお答えください。</label>
+          <div className="flex gap-2 flex-wrap">
+            {[
+              "なし",
+              "未就学", 
+              "小学生", 
+              "中学生",
+              "高校生",
+              "大学生",
+              "社会人",
+            ].map((children) => (
+              <button
+                key={children}
+                className={`px-4 py-2 rounded-lg border ${
+                  selectedChildrenOld === children
+                    ? "bg-blue-500 text-white"
+                    : "bg-gray-200"
+                }`}
+                onClick={() => setSelectedChildrenOld(children as ChildrenOld)}
               >
                 {children}
+              </button>
+            ))}
+          </div>
+        </div>
+        {/* 居住年数 */}
+        <div className="mb-4">
+          <label className="block font-semibold mb-2">今の最寄りの駅での居住年数を教えてください。</label>
+          <div className="flex gap-2 flex-wrap">
+            {[
+              "1年未満",
+              "1年～5年",
+              "6年～10年",
+              "11年～20年",
+              "20年以上",
+            ].map((residence) => (
+              <button
+                key={residence}
+                className={`px-4 py-2 rounded-lg border ${
+                  selectedYearsResidence === residence
+                    ? "bg-blue-500 text-white"
+                    : "bg-gray-200"
+                }`}
+                onClick={() => setSelectedYearsResidence(residence as YearsResidence)}
+              >
+                {residence}
               </button>
             ))}
           </div>
@@ -186,6 +300,7 @@ export default function Home() {
             </ul>
           )}
         </div>
+       {/* 居住地の沿線 */}
         <div className="mb-4">
           <label className="block font-semibold mb-2">居住地の沿線</label>
           <input
