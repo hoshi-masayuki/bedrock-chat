@@ -75,7 +75,8 @@ type YearsResidence =
     };
   
     return (
-      <div className="h-screen flex flex-col gap-4">
+    <>
+      <div className="flex flex-col flex-nowrap justify-between min-h-[89.5vh]">
         <header className="p-4 grid place-items-center">
           <h1 className="text-2xl font-semibold">AI Deep Insights</h1>
           <p className="text-center mb-4">はじめにあなたのことを教えてください※全ての項目を選択してください</p>
@@ -195,11 +196,13 @@ type YearsResidence =
             onChange={(e) => setStation(e.target.value)}
           />
         </div>
-  
-        <button onClick={handleStartInterview} className="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
+      </div>
+      <div className="flex flex-col items-center justify-center ">
+        <button onClick={handleStartInterview} className="px-4 py-3 mb-3 bg-blue-700 hover:bg-blue-500 text-white rounded-lg">
           インタビュー開始
         </button>
       </div>
+    </>
     );
   }
   
