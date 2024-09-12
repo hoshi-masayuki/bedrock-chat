@@ -156,10 +156,11 @@ import {
         {/* 駅情報入力部分 */}
         <div className="mb-4">
           <label className="block font-semibold mb-2">居住地の沿線</label>
+          <p className="block font-semibold mb-2">※複数ある場合はよく使うものをひとつ記載</p>
           <input
             type="text"
             className="w-full px-4 py-2 border rounded-lg"
-            placeholder="複数ある場合はよく使うものをひとつ記載"
+            placeholder="回答入力"
             value={station}
             onChange={(e) => setStation(e.target.value)}
           />
