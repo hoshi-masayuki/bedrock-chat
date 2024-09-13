@@ -10,7 +10,10 @@ export default function Result() {
   // マウント時に自動で fetch を送信する
   useEffect(() => {
     let storageText = localStorage.getItem("chats");
-    let _prompt = `${storageText} を基にユーザーが沿線に何を求めているのかまとめてください`;
+    const demographicData = localStorage.getItem("interviewData")
+    let _prompt = `${storageText} ${demographicData}を基にお客様がその沿線に何を求めているのか深層心理を箇条書きで分析してください。
+    お客様が自己分析を確認する画面になっているのでお客様に伝えるような方を取ってください。
+    `;
     console.log(_prompt);
     
     startTransition(async () => {
@@ -107,7 +110,7 @@ export default function Result() {
                 <Image src="/chatbot.png" alt="アイコン" width={30} height={30} />
               </div>
               <div className="w-[80%] mb-[30px] p-[15px] bg-white rounded-[10px] shadow-2xl">
-                <p className="leading-relaxed">{botChat}</p>
+                <pre className="whitespace-pre-wrap leading-relaxed">{botChat}</pre>
               </div>
             </div>
           }
@@ -127,7 +130,7 @@ export default function Result() {
             <p>回答いただきありがとうございました、ファイルにお名前のご記入後アップロードお願いいたします。</p>
             <p className="mb-5">下記のボタンを押すとアップロード画面に遷移しますのでご協力お願いいたします。</p>
             <div className="w-48 h-15 leading-[30px] mx-auto p-2 text-center bg-blue-600 rounded-lg">
-              <a className="text-xl text-white" href="https://www.google.com/" target="_blank">送信画面へ</a>
+              <a className="text-xl text-white" href="https://drive.google.com/drive/folders/13gOzglUEVEf9-WbsfjbNVUKRdNRGsDrS" target="_blank">送信画面へ</a>
             </div>
           </div>
         }

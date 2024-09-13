@@ -18,10 +18,10 @@ interface SelectableButtonGroupProps<T> {
           {options.map((option) => (
             <button
               key={option}
-              className={`px-4 py-2 rounded-lg border ${
+              className={`px-4 py-2 rounded-lg border shadow-2xl ${
                 selectedOption === option
                   ? "bg-blue-500 text-white"
-                  : "bg-gray-200"
+                  : "bg-white"
               }`}
               onClick={() => setSelectedOption(option)}
             >
