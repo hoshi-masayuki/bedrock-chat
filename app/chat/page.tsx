@@ -14,7 +14,7 @@ export default function Chatbot() {
   const chatEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const savedChats = localStorage.getItem("chats")
+    const savedChats = localStorage.getItem("chats")    
     if (savedChats) setChats(JSON.parse(savedChats))
     const savedDemographicData = localStorage.getItem("interviewData")
     if (savedDemographicData) setDemographicData(JSON.parse(savedDemographicData))
@@ -32,12 +32,15 @@ export default function Chatbot() {
     let userInput = e.target[0].value // ユーザーが入力した内容
     let _prompt = userInput // 初期プロンプト
 
-    const interviewDemographic = JSON.stringify(demographicData);
+    // 前画面で選択したユーザー情報
+    const obj = localStorage.getItem("interviewData") //localStorageから、取得する
+    const  userInfo = JSON.stringify(obj) //値を文字型に変換
+
     const targetValue = "質問は以上になりますお時間いただきありがとうございました";
 
     // 送信内容を条件に応じて修正
     if (sendCount >= 0 && sendCount <= 4) {
-      _prompt += `ユーザーの返答内容では、深層心理にはまだ不十分です。${interviewDemographic}の情報を踏まえつつ追加で質問してください。`
+      _prompt += `ユーザーの返答内容では、深層心理にはまだ不十分です。${userInfo}の情報を踏まえつつ追加で質問してください。`
     } else if (sendCount >= 5 && sendCount <= 8) {
       // これまでにユーザーが入力した内容と、インタビューを終了させる条件
       _prompt += chats.filter(chat => chat.type === "user").map(chat => chat.text).join(" ") + `これまでのユーザーの返答をすべて考慮して以下のフォーマットに必要な情報がそろっていると判断した場合、「質問は以上になりますお時間いただきありがとうございました。」とだけお伝えしインタビューを終了してください。不足している情報がある場合は、追加で質問してください。
