@@ -5,7 +5,6 @@ import Image from "next/image";
 
 export default function Chatbot() {
   const [isPending, startTransition] = useTransition()
-  const [demographicData, setDemographicData] = useState(null);
   const [prompt, setPrompt] = useState("")
   const [chats, setChats] = useState<{ type: "user" | "bot"; text: string }[]>([])
   const [sendCount, setSendCount] = useState(0) // 送信回数を管理
@@ -16,8 +15,6 @@ export default function Chatbot() {
   useEffect(() => {
     const savedChats = localStorage.getItem("chats")    
     if (savedChats) setChats(JSON.parse(savedChats))
-    const savedDemographicData = localStorage.getItem("interviewData")
-    if (savedDemographicData) setDemographicData(JSON.parse(savedDemographicData))
   }, [])
 
   useEffect(() => {
