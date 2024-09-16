@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useTransition, useEffect } from "react";
+import Image from "next/image";
 
 export default function Result() {
   const [isPending, startTransition] = useTransition();
@@ -9,8 +10,12 @@ export default function Result() {
   // マウント時に自動で fetch を送信する
   useEffect(() => {
     let storageText = localStorage.getItem("chats");
-    let _prompt = `${storageText} を基にユーザーが沿線に何を求めているのかまとめてください`;
-
+    const demographicData = localStorage.getItem("interviewData")
+    let _prompt = `${storageText} ${demographicData}を基にお客様がその沿線に何を求めているのか深層心理を箇条書きで分析してください。
+    お客様が自己分析を確認する画面になっているのでお客様に伝えるような方を取ってください。
+    `;
+    console.log(_prompt);
+    
     startTransition(async () => {
       const response = await fetch(`/api/chat`, {
         method: "POST",
@@ -94,44 +99,42 @@ export default function Result() {
 
   return (
     <>
-      <div className="flex flex-col flex-nowrap justify-between min-h-[89.5vh]">
-        <header className="p-4 grid place-items-center">
-          <h1 className="text-2xl font-semibold">レポート結果</h1>
-        </header>
-        <main className="flex-1 flex flex-col p-4">
-        <div className="flex flex-col items-start gap-1">
-                <div className="flex flex-col max-w-[75%] rounded-lg p-4 bg-gray-100">
-                  <div className="flex items-center gap-2 text-sm">
-                  </div>
-                  <div className="mt-2 whitespace-pre-wrap">インタビューの回答いただきありがとうございました以下のフォルダーに出力結果をお名前と併せてご記入ください
-                  <div className="text-green-600 px-2 py-1 rounded-full">
-                      <a href="https://www.google.com/" target="_blank">ここをクリックするとフォルダーに遷移します</a>
-                    </div>
-                  </div>
-                </div>
+      <header className="text-center py-4">
+        <h1 className="text-4xl font-bold">レポート結果</h1>
+      </header>
+      <main className="flex flex-col flex-nowrap content-center min-h-[93vh]">
+        <div className="mt-8">
+          {botChat &&
+            <div className="flex flex-nowrap">
+              <div className="flex justify-center items-center w-[50px] h-[50px] rounded-full mr-[10px] bg-white">
+                <Image src="/chatbot.png" alt="アイコン" width={30} height={30} />
               </div>
-          <div className="grid gap-4">
-            {botChat &&
-              <div className="flex flex-col items-start gap-1">
-                <div className="flex flex-col max-w-[75%] rounded-lg p-4 bg-gray-100">
-                  <div className="flex items-center gap-2 text-sm">
-                    <div className="font-medium bg-green-600 text-white px-2 py-1 rounded-full">Bed Rock Chat</div>
-                  </div>
-                  <div className="mt-2 whitespace-pre-wrap">{botChat}</div>
-                </div>
+              <div className="w-[80%] mb-[30px] p-[15px] bg-white rounded-[10px] shadow-2xl">
+                <pre className="whitespace-pre-wrap leading-relaxed">{botChat}</pre>
               </div>
-            }
-            {isPending && botChat.length === 0 && <div className="flex flex-col items-start gap-1">
-              <div className="flex flex-col max-w-[75%] rounded-lg p-4 bg-gray-100">
-                <div className="flex items-center gap-2 text-sm">
-                  <div className="font-medium">Bed Rock</div>
-                </div>
-                <div className="mt-2">考え中...</div>
+            </div>
+          }
+          {isPending && botChat.length === 0 && 
+            <div className="flex flex-nowrap">
+              <div className="flex justify-center items-center w-[50px] h-[50px] rounded-full mr-[10px] bg-white">
+                <Image src="/chatbot.png" alt="アイコン" width={30} height={30} />
               </div>
-            </div>}
+              <div className="w-[80%] mb-[30px] p-[15px] bg-white rounded-[10px] shadow-2xl">
+                <p className="leading-relaxed">考え中...</p>
+              </div>
+            </div>
+          }
+        </div>
+        {botChat.length >= 1 &&
+          <div className="mt-10 p-5 px-7 text-center rounded-lg">
+            <p>回答いただきありがとうございました、ファイルにお名前のご記入後アップロードお願いいたします。</p>
+            <p className="mb-5">下記のボタンを押すとアップロード画面に遷移しますのでご協力お願いいたします。</p>
+            <div className="w-48 h-15 leading-[30px] mx-auto p-2 text-center bg-blue-600 rounded-lg">
+              <a className="text-xl text-white" href="https://drive.google.com/drive/folders/13gOzglUEVEf9-WbsfjbNVUKRdNRGsDrS" target="_blank">送信画面へ</a>
+            </div>
           </div>
-        </main>
-      </div>
+        }
+      </main>
     </>
   );
 }

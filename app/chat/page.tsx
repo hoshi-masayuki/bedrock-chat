@@ -37,10 +37,10 @@ export default function Chatbot() {
 
     // 送信内容を条件に応じて修正
     if (sendCount >= 0 && sendCount <= 4) {
-      _prompt += "ユーザーの返答内容では、深層心理にはまだ不十分です。追加で質問してください。"
+      _prompt += `ユーザーの返答内容では、深層心理にはまだ不十分です。${userInfo}の情報を踏まえつつ追加で質問してください。`
     } else if (sendCount >= 5 && sendCount <= 8) {
       // これまでにユーザーが入力した内容と、インタビューを終了させる条件
-      _prompt += chats.filter(chat => chat.type === "user").map(chat => chat.text).join(" ") + `これまでのユーザーの返答をすべて考慮して以下のフォーマットに必要な情報がそろっていると判断した場合、「質問は以上になりますお時間いただきありがとうございました。」とお伝えしインタビューを終了してくださいインタビューを終了してください。不足している情報がある場合は、追加で質問してください。
+      _prompt += chats.filter(chat => chat.type === "user").map(chat => chat.text).join(" ") + `これまでのユーザーの返答をすべて考慮して以下のフォーマットに必要な情報がそろっていると判断した場合、「質問は以上になりますお時間いただきありがとうございました。」とだけお伝えしインタビューを終了してください。不足している情報がある場合は、追加で質問してください。
       インタビュー結果で埋めるべき項目
       ・通勤・交通利便性：毎日の移動の快適さや時間短縮に対する価値観
       ・生活環境：緑地や静かな環境、近隣の施設（スーパー、病院、学校など）に対する重要度
@@ -149,7 +149,7 @@ export default function Chatbot() {
   }
 
   const onResetChats=  () => {
-    localStorage.clear()
+    localStorage.removeItem('chats');
     setChats([])
     setSendCount(0)
   }
@@ -172,7 +172,7 @@ export default function Chatbot() {
               <Image src="/chatbot.png" alt="アイコン" width={30} height={30} />
             </div>
             <div className="chatText w-[80%] mb-[30px] p-[10px] bg-white rounded-[10px]">
-              <p>あなたは何故阪急電鉄の近くに住むことになったのでしょうか？また、住んでいる地域での思い出等あれば教えてください。</p>
+              <p>あなたは何故その沿線の近くに住むことになったのでしょうか？また、住んでいる地域での思い出等あれば教えてください。</p>
             </div>
           </div>
           {chats.map((chat, index) => (
