@@ -39,8 +39,19 @@ import {
       };
   
       localStorage.setItem("interviewData", JSON.stringify(interviewData));
-      location.href = "/chat";
+      location.href = "/chat";   
     };
+     // すべての選択肢が選択されているかをチェック
+     const isDisabled = 
+     !selectedGender ||
+     !selectedAge ||
+     !selectedFamily ||
+     !selectedFamilySize ||
+     !selectedChildrenSize ||
+     !selectedChildrenOld ||
+     !selectedIncome ||
+     !selectedYearsResidence ||
+     !station;
   
     return (
     <>
@@ -166,7 +177,7 @@ import {
         </div>
       </div>
       <div className="flex flex-col items-center justify-center mb-8">
-        <button onClick={handleStartInterview} className="px-4 py-3 mb-3 bg-blue-700 hover:bg-blue-500 text-white rounded-lg">
+        <button onClick={handleStartInterview}  disabled={isDisabled} className={`px-4 py-3 mb-3 text-white rounded-lg ${isDisabled ? 'bg-blue-200 cursor-not-allowed' : 'bg-blue-700 hover:bg-blue-500'}`}>
           インタビュー開始
         </button>
       </div>
