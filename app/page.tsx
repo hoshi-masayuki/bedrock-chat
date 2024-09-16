@@ -83,11 +83,11 @@ import {
         <SelectableButtonGroup
           label="同居している家族の人数"
           options={[
-            "1人（一人暮らし）" ,
-            "2人",
-            "3人",
-            "4人",
-            "5人以上",
+             "1人（一人暮らし）" ,
+             "2人",
+             "3人",
+             "4人",
+             "5人以上",
           ]}
           selectedOption={selectedFamilySize}
           setSelectedOption={setSelectedFamilySize}
@@ -96,10 +96,10 @@ import {
         <SelectableButtonGroup
           label="同居している家族には、あなたのお子様（息子さんや娘さん）がいらっしゃいますか。"
           options={[  
-            "いない",
-            "1人いる" ,
-            "2人いる",
-            "3人以上いる",
+             "いない",
+             "1人いる" ,
+             "2人いる",
+             "3人以上いる",
           ]}
           selectedOption={selectedChildrenSize}
           setSelectedOption={setSelectedChildrenSize}
@@ -108,13 +108,13 @@ import {
         <SelectableButtonGroup
           label="同居している家族には、あなたのお子様（息子さんや娘さん）がいらっしゃいますか。"
           options={[
-            "なし" ,
-            "未就学", 
-            "小学生", 
-            "中学生" ,
-            "高校生" ,
-            "大学生",
-            "社会人",
+             "なし" ,
+             "未就学", 
+             "小学生", 
+             "中学生" ,
+             "高校生" ,
+             "大学生",
+             "社会人",
           ]}
           selectedOption={selectedChildrenOld}
           setSelectedOption={setSelectedChildrenOld}
@@ -125,17 +125,17 @@ import {
         <Dropdown
           label="世帯年収"
           options={[
-            "200万円未満",
-            "200万円以上400万円未満",
-            "400万円以上600万円未満",
-            "600万円以上800万円未満",
-            "800万円以上1000万円未満",
-            "1000万円以上1200万円未満",
-            "1200万円以上1500万円未満",
-            "1500万円以上2000万円未満",
-            "2000万円以上",
-            "わからない",
-            "答えたくない",
+             "200万円未満",
+             "200万円以上400万円未満",
+             "400万円以上600万円未満",
+             "600万円以上800万円未満",
+             "800万円以上1000万円未満",
+             "1000万円以上1200万円未満",
+             "1200万円以上1500万円未満",
+             "1500万円以上2000万円未満",
+             "2000万円以上",
+             "わからない",
+             "答えたくない",
           ]}
           setSelectedOption={setSelectedIncome}
         />
@@ -143,11 +143,11 @@ import {
         <SelectableButtonGroup
           label="今の最寄りの駅での居住年数を教えてください。"
           options={[
-            "1年未満",
-            "1年～5年",
-            "6年～10年",
-            "11年～20年",
-            "20年以上",
+             "1年未満",
+             "1年～5年",
+             "6年～10年",
+             "11年～20年",
+             "20年以上",
           ]}
           selectedOption={selectedYearsResidence}
           setSelectedOption={setSelectedYearsResidence}
