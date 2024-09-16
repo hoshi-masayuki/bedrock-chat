@@ -99,7 +99,7 @@ export default function Result() {
 
   return (
     <>
-      <header className="mt-8 text-center py-4">
+      <header className="text-center py-4">
         <h1 className="text-4xl font-bold">レポート結果</h1>
       </header>
       <main className="flex flex-col flex-nowrap content-center min-h-[93vh]">
