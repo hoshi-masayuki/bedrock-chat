@@ -14,7 +14,6 @@ export default function Result() {
     let _prompt = `${storageText} ${demographicData}を基にお客様がその沿線に何を求めているのか深層心理を箇条書きで分析してください。
     お客様が自己分析を確認する画面になっているのでお客様に伝えるような方を取ってください。
     `;
-    console.log(_prompt);
     
     startTransition(async () => {
       const response = await fetch(`/api/chat`, {
