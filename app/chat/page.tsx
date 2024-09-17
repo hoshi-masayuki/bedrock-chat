@@ -172,7 +172,7 @@ export default function Chatbot() {
               <Image src="/chatbot.png" alt="アイコン" width={30} height={30} />
             </div>
             <div className="chatText w-[80%] mb-[30px] p-[10px] bg-white rounded-[10px]">
-              <p>あなたは何故その沿線の近くに住むことになったのでしょうか？また、住んでいる地域での思い出等あれば教えてください。</p>
+              <p>あなたは何故今の沿線上に住むことになったのでしょうか？また、住んでいる地域での思い出等あれば教えてください。</p>
             </div>
           </div>
           {chats.map((chat, index) => (
