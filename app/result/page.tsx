@@ -12,6 +12,7 @@ export default function Result() {
     let storageText = localStorage.getItem("chats");
     const demographicData = localStorage.getItem("interviewData")
     let _prompt = `${storageText} ${demographicData}を基にお客様がその沿線に何を求めているのか深層心理を箇条書きで分析してください。
+    やりとりの内容をまとめるのではなく、やりとりから読み取れる・類推できる要素を抽出してください。課題がある場合は、その課題に対して、どのように行動するかを推測してください。
     お客様が自己分析を確認する画面になっているのでお客様に伝えるような方を取ってください。
     `;
     
