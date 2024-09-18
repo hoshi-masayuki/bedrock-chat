@@ -135,9 +135,8 @@ export default function Result() {
           }
         </div>
         {botChat.length >= 1 &&
-          <div className="mt-10 p-5 px-7 text-center rounded-lg">
-            <p>回答いただきありがとうございました、お名前を記載したディレクトリを作成しディレクトリ内にファイルのアップロードお願いいたします。
-            </p>
+          <div className="mt-10 p-5 pr-20 pl-20 rounded-lg mx-auto">
+            <p>回答いただきありがとうございました。お名前を記載したディレクトリを作成後、ディレクトリ内にファイルのアップロードお願いいたします。</p>
             <p>個人名を明かしたくない場合は、何か固有の名前でのご対応お願いいたします。</p>
             <p className="mb-5">下記のボタンを押すとアップロード画面に遷移しますのでご協力お願いいたします。</p>
             <div className="w-48 h-15 leading-[30px] mx-auto p-2 text-center bg-blue-600 rounded-lg">
