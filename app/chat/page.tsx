@@ -149,6 +149,12 @@ export default function Chatbot() {
   }
 
   const saveReport = () => {
+    const textContent = chats.map(chat => `${chat.type === "user" ? "User" : "Bot"}: ${chat.text}`).join("\n\n");
+    const blob = new Blob([textContent], { type: 'text/plain' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'talk.txt';
+    link.click();
     const url = "/result"
     location.href = url
   }
