@@ -204,7 +204,7 @@ export default function Chatbot() {
             />
             <button type="submit" disabled={isSubmitDisabled} className={`sendIcon w-[10%] p-3 py-4 bg-green-500 text-white rounded-md ${isSubmitDisabled ? 'bg-green-200 cursor-not-allowed' : 'hover:bg-green-400'}`}>送信</button>
             <button type="button" onClick={onResetChats} className="w-[43%] p-3 py-4 mt-[10px] mr-[40px] bg-red-600 text-white rounded-md hover:bg-red-400">やり直し</button>
-            <button type="button" onClick={saveReport} disabled={isFinishButtonEnabled} className={`w-[43%] p-3 py-4 mt-[10px] text-white rounded-md ${isFinishButtonEnabled ? 'bg-blue-200 cursor-not-allowed' : 'bg-blue-700 hover:bg-blue-500'}`}>レポートダウンロード</button>
+            <button type="button" onClick={saveReport} disabled={isFinishButtonEnabled} className={`w-[43%] p-3 py-4 mt-[10px] text-white rounded-md ${isFinishButtonEnabled ? 'bg-blue-200 cursor-not-allowed' : 'bg-blue-700 hover:bg-blue-500'}`}>レポート結果を見る</button>
           </form>
         </div>
       </main>
