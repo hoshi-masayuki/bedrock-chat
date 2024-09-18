@@ -7,6 +7,15 @@ export default function Result() {
   const [isPending, startTransition] = useTransition();
   const [botChat, setBotChat] = useState("")
 
+  const downloadTxtFile = () => {
+    const element = document.createElement("a");
+    const file = new Blob([botChat], { type: 'text/plain' });
+    element.href = URL.createObjectURL(file);
+    element.download = "result.txt";
+    document.body.appendChild(element); // 必要に応じて追加
+    element.click();
+  };
+
   // マウント時に自動で fetch を送信する
   useEffect(() => {
     let storageText = localStorage.getItem("chats");
@@ -132,7 +141,7 @@ export default function Result() {
             <p>個人名を明かしたくない場合は、何か固有の名前でのご対応お願いいたします。</p>
             <p className="mb-5">下記のボタンを押すとアップロード画面に遷移しますのでご協力お願いいたします。</p>
             <div className="w-48 h-15 leading-[30px] mx-auto p-2 text-center bg-blue-600 rounded-lg">
-              <a className="text-xl text-white" href="https://drive.google.com/drive/folders/13gOzglUEVEf9-WbsfjbNVUKRdNRGsDrS" target="_blank">送信画面へ</a>
+              <a onClick={downloadTxtFile} className="text-xl text-white" href="https://drive.google.com/drive/folders/13gOzglUEVEf9-WbsfjbNVUKRdNRGsDrS" target="_blank">送信画面へ</a>
             </div>
           </div>
         }
