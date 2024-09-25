@@ -11,7 +11,8 @@ import {
   ChildrenSize, 
   ChildrenOld, 
   IncomeGroup, 
-  YearsResidence 
+  YearsResidence ,
+  Building
 } from "./types/UserType";
 
   export default function SelectValue() {
@@ -23,6 +24,7 @@ import {
     const [selectedChildrenOld, setSelectedChildrenOld] = useState<ChildrenOld | null>(null);
     const [selectedIncome, setSelectedIncome] = useState<IncomeGroup | null>(null);
     const [selectedYearsResidence, setSelectedYearsResidence] = useState<YearsResidence | null>(null);
+    const [selectedBuilding, setSelectedBuilding] = useState<Building | null>(null);
     const [station, setStation] = useState<string>("");
   
     const handleStartInterview = () => {
@@ -36,6 +38,7 @@ import {
         station: station,
         familySize: selectedFamilySize,
         yearsResidence: selectedYearsResidence,
+        building: selectedBuilding
       };
   
       localStorage.setItem("interviewData", JSON.stringify(interviewData));
@@ -51,6 +54,7 @@ import {
      !selectedChildrenOld ||
      !selectedIncome ||
      !selectedYearsResidence ||
+     !selectedBuilding ||
      !station;
   
     return (
@@ -162,6 +166,16 @@ import {
           ]}
           selectedOption={selectedYearsResidence}
           setSelectedOption={setSelectedYearsResidence}
+        />
+
+        <SelectableButtonGroup
+          label="今の物件について教えてください。"
+          options={[
+            "持ち家",
+            "賃貸",
+          ]}
+          selectedOption={selectedBuilding}
+          setSelectedOption={setSelectedBuilding}
         />
         {/* 駅情報入力部分 */}
         <div className="mb-4">
